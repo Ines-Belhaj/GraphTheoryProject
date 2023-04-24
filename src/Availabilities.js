@@ -65,14 +65,34 @@ function stableMatching(studentPrefs, tutorPrefs) {
 
   return tutorAssignments;
 };
-
+function getAvailabilityArray(students) {
+  let availabilityArray = [];
+  
+  students.forEach((student) => {
+    let studentAvailability = [];
+    
+    student.availabilities.forEach((availability) => {
+      availability.timeSlots.forEach((timeSlot) => {
+        let availabilityCode = availability.day.toString() + timeSlot;
+        studentAvailability.push(parseInt(availabilityCode));
+      });
+    });
+    
+    availabilityArray.push({name: student.name, availability: studentAvailability});
+  });
+  
+  return availabilityArray;
+}
 function setPrefrences (t,s) {
   const finalPrefrences = [];
-  for (const tutor of t) {
+  const tutorsList=getAvailabilityArray(t)
+  const studentsList=getAvailabilityArray(s)
+  console.log(tutorsList)
+  for (const tutor of tutorsList) {
     const preferences = [];
     
     // Loop through each student
-    for (const student of s) {
+    for (const student of studentsList) {
       let commonSlots = 0;
       
       // Calculate the number of common available time slots
